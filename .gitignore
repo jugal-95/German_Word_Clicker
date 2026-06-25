@@ -1,0 +1,9 @@
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+.vscode/
+*.zip
+
+# Personal API key — never commit this
+extension/config.js

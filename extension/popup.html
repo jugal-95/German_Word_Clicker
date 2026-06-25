@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>German Word Clicker</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 320px;
+    max-height: 480px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #1a1a22;
+    color: #e8e8ee;
+  }
+
+  #header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+    border-bottom: 1px solid #34343f;
+  }
+
+  #logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #2a2640;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #a99bf0;
+    flex-shrink: 0;
+  }
+
+  #title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e8e8ee;
+  }
+
+  #subtitle {
+    font-size: 11.5px;
+    color: #9494a3;
+    margin-top: 1px;
+  }
+
+  #tabs {
+    display: flex;
+    border-bottom: 1px solid #34343f;
+  }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #9494a3;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab.active {
+    color: #a99bf0;
+    border-bottom-color: #a99bf0;
+  }
+
+  #panel-status {
+    padding: 14px 16px;
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: #9494a3;
+    margin-bottom: 10px;
+  }
+
+  .badge-on {
+    background: #1c3530;
+    color: #5dcaa5;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-off {
+    background: #34343f;
+    color: #9494a3;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tip {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background: #232330;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #9494a3;
+    line-height: 1.55;
+  }
+
+  .tip strong { color: #a99bf0; font-weight: 600; }
+  .tip em { color: #e8e8ee; font-style: normal; }
+
+  #panel-vocab {
+    display: none;
+    max-height: 380px;
+    overflow-y: auto;
+  }
+
+  #vocab-list {
+    padding: 8px;
+  }
+
+  .vocab-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 10px;
+    border-radius: 8px;
+  }
+
+  .vocab-item:hover {
+    background: #232330;
+  }
+
+  .vocab-word-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .vocab-word {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e8e8ee;
+  }
+
+  .vocab-gender {
+    font-size: 11px;
+    font-weight: 700;
+    color: #a99bf0;
+  }
+
+  .vocab-def {
+    font-size: 12px;
+    color: #9494a3;
+    margin-top: 2px;
+    max-width: 220px;
+  }
+
+  .vocab-remove {
+    all: unset;
+    cursor: pointer;
+    color: #65656f;
+    font-size: 13px;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+
+  .vocab-remove:hover {
+    color: #f0997b;
+  }
+
+  #empty-state {
+    padding: 32px 20px;
+    text-align: center;
+    color: #65656f;
+    font-size: 12.5px;
+    line-height: 1.6;
+    display: none;
+  }
+
+  #footer {
+    padding: 10px 16px;
+    border-top: 1px solid #34343f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #count {
+    font-size: 11.5px;
+    color: #65656f;
+  }
+
+  #export-btn {
+    all: unset;
+    cursor: pointer;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #a99bf0;
+    padding: 4px 8px;
+  }
+
+  #export-btn:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+  <div id="header">
+    <div id="logo">DE</div>
+    <div>
+      <div id="title">German Word Clicker</div>
+      <div id="subtitle">Instant subtitle lookup</div>
+    </div>
+  </div>
+
+  <div id="tabs">
+    <div class="tab active" data-tab="status">How it works</div>
+    <div class="tab" data-tab="vocab">Saved words</div>
+  </div>
+
+  <div id="panel-status">
+    <div class="status-row">
+      Active on YouTube and Netflix
+      <span class="badge-on">on</span>
+    </div>
+    <div class="status-row">
+      AI-powered definitions
+      <span id="ai-status-badge" class="badge-off">checking&hellip;</span>
+    </div>
+    <div class="tip">
+      <strong>To use:</strong> turn on German subtitles on any video, then click a word to see its meaning, gender, and an example sentence.
+    </div>
+    <div class="tip">
+      <strong>Tip:</strong> click the <em>star</em> icon in the popup to save a word to your vocab list for review later.
+    </div>
+  </div>
+
+  <div id="panel-vocab">
+    <div id="vocab-list"></div>
+    <div id="empty-state">
+      No saved words yet.<br />Click the star icon when looking up a word to save it here.
+    </div>
+  </div>
+
+  <div id="footer" style="display:none">
+    <span id="count">0 words</span>
+    <button id="export-btn">Export CSV</button>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

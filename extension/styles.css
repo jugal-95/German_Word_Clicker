@@ -1,0 +1,310 @@
+/* ════════════════════════════════════════════════════════════════════════
+   German Word Clicker — styles.css
+   Design language: dark surface, purple/teal accents, flat, no gradients.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --gwc-bg: #1a1a22;
+  --gwc-surface: #232330;
+  --gwc-border: #34343f;
+  --gwc-text: #e8e8ee;
+  --gwc-text-dim: #9494a3;
+  --gwc-text-faint: #65656f;
+  --gwc-purple: #a99bf0;
+  --gwc-purple-dim: #2a2640;
+  --gwc-teal: #5dcaa5;
+  --gwc-teal-dim: #1c3530;
+  --gwc-coral: #f0997b;
+  --gwc-coral-dim: #3a261c;
+  --gwc-radius: 12px;
+  --gwc-radius-sm: 7px;
+}
+
+/* ── Clickable subtitle words ─────────────────────────────────────────── */
+.gwc-word {
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  vertical-align: baseline;
+  display: inline;
+  background: none;
+  transition: background-color 0.12s ease;
+}
+
+.gwc-word:hover {
+  background-color: rgba(169, 155, 240, 0.35);
+  padding: 0 2px;
+  margin: 0 -2px;
+}
+
+.gwc-word:hover {
+  background-color: rgba(169, 155, 240, 0.32);
+}
+
+.gwc-word.gwc-active {
+  background-color: rgba(169, 155, 240, 0.5);
+}
+
+/* ── Popup container ──────────────────────────────────────────────────── */
+#gwc-popup {
+  position: fixed;
+  z-index: 2147483647;
+  width: 320px;
+  max-width: calc(100vw - 24px);
+  background: var(--gwc-bg);
+  border: 1px solid var(--gwc-border);
+  border-radius: var(--gwc-radius);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--gwc-text);
+  display: none;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+#gwc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  background: var(--gwc-surface);
+  border-bottom: 1px solid var(--gwc-border);
+}
+
+#gwc-word {
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--gwc-text);
+  letter-spacing: 0.2px;
+  word-break: break-word;
+  padding-right: 8px;
+}
+
+#gwc-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+#gwc-actions button {
+  all: unset;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--gwc-radius-sm);
+  color: var(--gwc-text-dim);
+  font-size: 15px;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+#gwc-actions button:hover {
+  background: var(--gwc-border);
+  color: var(--gwc-text);
+}
+
+#gwc-save.gwc-saved {
+  color: #f0c75d;
+}
+
+#gwc-body {
+  padding: 14px 16px 16px;
+}
+
+/* ── Loading state ────────────────────────────────────────────────────── */
+#gwc-loading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--gwc-text-dim);
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.gwc-spinner {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  border: 2px solid var(--gwc-border);
+  border-top-color: var(--gwc-purple);
+  border-radius: 50%;
+  animation: gwc-spin 0.7s linear infinite;
+}
+
+@keyframes gwc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Meta badges (part of speech, gender) ─────────────────────────────── */
+#gwc-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.gwc-pos {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--gwc-border);
+  color: var(--gwc-text-dim);
+}
+
+.gwc-pos-noun,
+.gwc-pos-proper-noun {
+  background: var(--gwc-purple-dim);
+  color: var(--gwc-purple);
+}
+
+.gwc-pos-verb {
+  background: var(--gwc-teal-dim);
+  color: var(--gwc-teal);
+}
+
+.gwc-pos-adjective,
+.gwc-pos-adverb {
+  background: var(--gwc-coral-dim);
+  color: var(--gwc-coral);
+}
+
+.gwc-gender {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 11px;
+  border-radius: 20px;
+}
+
+.gwc-gender-der {
+  background: #1c2d40;
+  color: #7eb3e8;
+}
+
+.gwc-gender-die {
+  background: #3a1c2c;
+  color: #e87ea3;
+}
+
+.gwc-gender-das {
+  background: var(--gwc-teal-dim);
+  color: var(--gwc-teal);
+}
+
+/* ── Source badge (AI vs Wiktionary) ──────────────────────────────────── */
+.gwc-source {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  margin-left: auto;
+}
+
+.gwc-source-ai {
+  background: #2a2640;
+  color: var(--gwc-purple);
+}
+
+.gwc-source-wiki {
+  background: var(--gwc-border);
+  color: var(--gwc-text-faint);
+}
+
+/* ── Base form note (shown when clicked word is an inflected form) ──────── */
+.gwc-baseform {
+  font-size: 12px;
+  color: var(--gwc-text-faint);
+  margin-bottom: 8px;
+}
+
+.gwc-baseform strong {
+  color: var(--gwc-text-dim);
+  font-weight: 600;
+}
+
+/* ── Definitions ───────────────────────────────────────────────────────── */
+#gwc-definitions {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.gwc-def {
+  display: flex;
+  gap: 9px;
+  font-size: 13.5px;
+  color: var(--gwc-text);
+}
+
+.gwc-num {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  background: var(--gwc-border);
+  color: var(--gwc-text-dim);
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Example sentence ─────────────────────────────────────────────────── */
+.gwc-example {
+  margin-top: 12px;
+  padding: 9px 11px;
+  background: var(--gwc-surface);
+  border-left: 2px solid var(--gwc-purple);
+  border-radius: 0 var(--gwc-radius-sm) var(--gwc-radius-sm) 0;
+  font-size: 12.5px;
+  color: var(--gwc-text-dim);
+  font-style: italic;
+}
+
+/* ── Footer link ───────────────────────────────────────────────────────── */
+#gwc-more {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--gwc-purple);
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+#gwc-more:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* ── Error state ───────────────────────────────────────────────────────── */
+#gwc-error {
+  font-size: 13px;
+  color: var(--gwc-text-dim);
+}
+
+#gwc-error em {
+  color: var(--gwc-text);
+  font-style: normal;
+  font-weight: 600;
+}
