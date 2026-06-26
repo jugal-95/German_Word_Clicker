@@ -1,6 +1,7 @@
 # German Word Clicker
 
-A Chrome extension I built to make learning German through YouTube and Netflix less painful. Click any word in the subtitles and you get the meaning, gender, and an example sentence right there — no pausing, no switching tabs.
+A Chrome extension I built to make learning German through YouTube and Netflix less painful. 
+Click any word in the subtitles and you get the meaning, gender, and an example sentence right there — no pausing, no switching tabs.
 
 **Try the demo**: open [`demo/index.html`](demo/index.html) in your browser — works without installing anything, just sample subtitles to click around.
 
@@ -22,7 +23,8 @@ A Chrome extension I built to make learning German through YouTube and Netflix l
 
 ## Why I made this
 
-When I was watching German videos to practice, every time I didn't know a word I had to pause, open a new tab, type the word into a dictionary (and sometimes guess the base form first), then go back and try to remember where I was.
+When I was watching German videos to practice, every time I didn't know a word I had to pause, open a new tab,
+type the word into a dictionary (and sometimes guess the base form first), then go back and try to remember where I was.
 
 It got annoying fast. So I built this — you just click the word and the definition shows up instantly.
 
@@ -30,9 +32,12 @@ It got annoying fast. So I built this — you just click the word and the defini
 
 ## How it works
 
-When a subtitle appears on screen, the extension wraps each word in a `<span>` so they're individually clickable. When you click one, it first tries the Gemini API (free tier) to get a clean English definition and the base form if it's conjugated. If that fails or no key is set, it falls back to Wiktionary automatically.
+When a subtitle appears on screen, the extension wraps each word in a `<span>` so they're individually clickable.
+When you click one, it first tries the Gemini API (free tier) to get a clean English definition and the base form if it's conjugated. 
+If that fails or no key is set, it falls back to Wiktionary automatically.
 
-The result pops up near the word — part of speech, gender for nouns, 2-3 definitions, and an example sentence. You can also star words to save them to a vocab list.
+The result pops up near the word — part of speech, gender for nouns, 2-3 definitions, and an example sentence. 
+You can also star words to save them to a vocab list.
 
 ---
 
