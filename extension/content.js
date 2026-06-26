@@ -1,23 +1,11 @@
-/**
- * German Word Clicker — content.js
- * Injected into YouTube and Netflix watch pages.
- *
- * Architecture:
- *  1. SubtitleWatcher  — finds subtitle DOM nodes, throttled MutationObserver
- *                        scoped to the player only (not document.body).
- *  2. WordWrapper      — splits subtitle text nodes into hoverable <span>s.
- *  3. AiClient         — primary lookup: Gemini free-tier API.
- *  4. Dictionary       — orchestrates lookups: AI-first, Wiktionary fallback.
- *                        Backed by in-memory + chrome.storage cache.
- *  5. VideoController  — pauses the video on hover, resumes when done.
- *  6. Popup            — renders the lookup result near the hovered word.
- *  7. VocabStore       — saves words to a personal list (chrome.storage.local).
- */
+// content.js — runs on YouTube and Netflix watch pages.
+// Wraps subtitle words in clickable spans, handles word lookups via Gemini or Wiktionary,
+// shows a popup with the definition, and manages the saved vocab list.
 
 (function () {
   "use strict";
 
-  // ───────────────────────── AI client (Gemini, free tier) ──────────────────
+  // --- AI client (Gemini, free tier) ---
   const AiClient = (() => {
     const MODEL = "gemini-2.5-flash";
     const ENDPOINT =
@@ -224,7 +212,7 @@
     return { get, set };
   })();
 
-  // ───────────────────────── Vocab list (user-saved words) ──────────────────
+  // --- Vocab list (user-saved words) ---
   const VocabStore = (() => {
     const KEY = "gwc_vocab_list";
 
@@ -278,7 +266,7 @@
     return { pause, resume };
   })();
 
-  // ───────────────────────── Popup UI ────────────────────────────────────────
+  // --- Popup UI ---
   const Popup = (() => {
     let el = null;
     let activeSpan = null;
@@ -610,7 +598,7 @@
     return { start, stop };
   })();
 
-  // ───────────────────────── Init + SPA navigation handling ──────────────────
+  // --- Init + SPA navigation ---
   function init() {
     Popup.ensure();
     SubtitleWatcher.start();
