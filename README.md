@@ -1,8 +1,8 @@
 # German Word Clicker
 
-A Chrome extension that turns subtitle words into instant dictionary lookups — click any word while watching German content on YouTube or Netflix, and get its meaning, gender, and an example sentence in under a second, without ever leaving the video.
+A Chrome extension I built to make learning German through YouTube and Netflix less painful. Click any word in the subtitles and you get the meaning, gender, and an example sentence right there — no pausing, no switching tabs.
 
-**Try it instantly**: open [`demo/index.html`](demo/index.html) in any browser — a self-contained page that simulates the experience with sample subtitles, no install needed.
+**Try the demo**: open [`demo/index.html`](demo/index.html) in your browser — works without installing anything, just sample subtitles to click around.
 
 ---
 
@@ -20,77 +20,46 @@ A Chrome extension that turns subtitle words into instant dictionary lookups —
 
 ---
 
-## The problem
+## Why I made this
 
-When watching German media as a learner, the loop looks like this:
+When I was watching German videos to practice, every time I didn't know a word I had to pause, open a new tab, type the word into a dictionary (and sometimes guess the base form first), then go back and try to remember where I was.
 
-1. A subtitle line appears with an unfamiliar word
-2. Pause the video
-3. Type the word into a separate dictionary site
-4. Read the result, often have to guess the correct base form first
-5. Un-pause, try to remember the word, repeat a minute later
-
-This extension collapses that to one click.
+It got annoying fast. So I built this — you just click the word and the definition shows up instantly.
 
 ---
 
 ## How it works
 
-```
-Subtitle appears on screen
-│
-▼
-Content script splits the subtitle text into clickable <span> elements
-│
-▼
-User clicks a word
-│
-▼
-Extension queries Gemini (free tier) for a clean English explanation,
-including resolving inflected forms to their dictionary base form
-│
-├── if no API key configured, or the AI call fails ──┐
-│                                                    ▼
-│                                       Falls back to the free Wiktionary
-│                                       REST API automatically
-▼
-Popup renders: part of speech, gender (der/die/das), base form (if the
-clicked word was inflected), up to 2-3 definitions, an example sentence,
-and a link to the full Wiktionary entry
-│
-▼
-User can optionally star the word to save it to a personal vocab list
-(persisted locally via chrome.storage, exportable as CSV)
-```
+When a subtitle appears on screen, the extension wraps each word in a `<span>` so they're individually clickable. When you click one, it first tries the Gemini API (free tier) to get a clean English definition and the base form if it's conjugated. If that fails or no key is set, it falls back to Wiktionary automatically.
+
+The result pops up near the word — part of speech, gender for nouns, 2-3 definitions, and an example sentence. You can also star words to save them to a vocab list.
 
 ---
 
 ## Features
 
-- **AI-powered definitions** via Google's free Gemini API — resolves inflected/conjugated forms (e.g. clicking *kannt* correctly explains it as a form of *können*) and always returns clean English, even for words where Wiktionary's German section is German-only or missing
-- **Automatic fallback to Wiktionary** if no API key is configured, or if the AI call fails for any reason — the extension always returns *something* useful
-- **One-click lookup** on YouTube and Netflix subtitles
-- **Gender detection** for German nouns (der/die/das), shown as a colored badge
-- **Personal vocab list** — save words you look up, review them later, export to CSV for flashcard apps like Anki
-- **Local caching** (24h TTL via chrome.storage.local) so repeated lookups don't hit the network
-- **Performance-safe by design** — the DOM observer is scoped to the video player only and throttled to run at most once every 400ms
+- Click any word in German subtitles on YouTube or Netflix to look it up
+- Uses Gemini API (free) as the primary source — handles conjugated/inflected forms well
+- Falls back to Wiktionary if no API key is set or the AI call fails
+- Shows noun gender (der/die/das) as a colored badge
+- Save words to a personal vocab list, stored locally, exportable as CSV for Anki
+- Caches results for 24 hours so the same word doesn't hit the network twice
+- MutationObserver is scoped to the video player only and throttled to 400ms — doesn't slow down playback
 
 ---
 
 ## Tech stack
 
-This project intentionally uses only the three core web languages:
+I kept it simple on purpose — no frameworks, no npm, no build step:
 
 | Layer | Technology |
-|-------|------------|
+|-------|-----------|
 | Structure | HTML5 |
-| Styling | CSS3 (custom properties, no frameworks) |
-| Logic | Vanilla JavaScript (ES6+, no build step, no dependencies) |
-| Primary definitions | Gemini API free tier — a `fetch()` call |
-| Fallback definitions | Wiktionary REST API — free, no key required |
-| Storage | `chrome.storage.local` (Chrome Extension API) |
-
-No backend server, no build tooling, no npm dependencies. Everything runs client-side in the browser.
+| Styling | CSS3 (custom properties) |
+| Logic | Vanilla JavaScript (ES6+) |
+| Primary definitions | Gemini API free tier |
+| Fallback definitions | Wiktionary REST API |
+| Storage | chrome.storage.local |
 
 ---
 
@@ -98,65 +67,63 @@ No backend server, no build tooling, no npm dependencies. Everything runs client
 
 ```
 german-word-clicker/
-├── extension/                   Chrome extension (Manifest V3)
-│   ├── manifest.json            Extension configuration
-│   ├── content.js               Injected into YouTube/Netflix
-│   ├── config.example.js        Template for your Gemini API key
-│   ├── config.js                Your actual key — gitignored, never committed
-│   ├── popup.html / .js         Toolbar popup — shows the saved vocab list
-│   ├── styles.css               Popup and clickable-word styling
-│   └── icons/                   Extension icons (16/48/128px)
+├── extension/              Chrome extension (Manifest V3)
+│   ├── manifest.json       Extension config
+│   ├── content.js          Injected into YouTube/Netflix
+│   ├── config.example.js   Template for your Gemini API key
+│   ├── config.js           Your actual key — gitignored
+│   ├── popup.html / .js    Toolbar popup — saved vocab list
+│   ├── styles.css          Popup and word styling
+│   └── icons/              Extension icons (16/48/128px)
 ├── demo/
-│   └── index.html               Standalone demo page — no install or API key required
+│   └── index.html          Standalone demo — no install needed
 └── README.md
 ```
 
 ---
 
-## Installing the extension locally
+## Installation
 
-1. Clone or download this repository
-2. **(Optional but recommended)** Set up the free AI layer:
-   - Go to [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and sign in with any Google account
+1. Clone or download this repo
+2. **(Optional)** Set up the Gemini API key for better lookups:
+   - Go to [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and sign in with a Google account
    - Click **Create API key** and copy it
    - In `extension/`, copy `config.example.js` → `config.js` and paste your key
-   - *Skipping this is fine — the extension falls back to Wiktionary automatically*
+   - If you skip this, it just uses Wiktionary — still works fine
 3. Open `chrome://extensions` in Chrome
-4. Enable **Developer mode** (top right toggle)
+4. Enable **Developer mode** (top right)
 5. Click **Load unpacked** and select the `extension/` folder
-6. Open any YouTube video, turn on German subtitles, and click a word
+6. Open a YouTube video, turn on German subtitles, and start clicking words
 
 ---
 
-## About the free tier
+## Gemini free tier
 
-Gemini's free tier covers far more daily lookups than a normal study session needs — each word lookup is a tiny request, and results are cached locally for 24 hours. If the free quota is ever exceeded, or no key is configured, the extension transparently falls back to the Wiktionary API with no error shown.
-
----
-
-## Design decisions worth noting
-
-**Scoped MutationObserver:** an early version watched `document.body` for changes, which fired on every UI update YouTube makes and caused noticeable lag. The fixed version observes only the video player container and throttles execution, keeping playback smooth.
-
-**AI-first with automatic fallback, not AI-only:** relying solely on an external AI API would mean the extension breaks if the key is missing or rate-limited. Wiktionary as a fallback means the core feature always works, even with zero configuration.
-
-**API key kept out of version control:** the key lives in a gitignored `config.js`, loaded as a separate content script before `content.js`. This is the standard pattern for client-side projects that need a personal key without leaking it in a public repo.
-
-**Caching layer:** lookups are cached both in memory and in `chrome.storage.local` with a 24-hour expiry, so re-watching a video or re-clicking a word doesn't trigger redundant network calls.
-
-**Graceful degradation:** if a word isn't found by either source, the popup shows a clear message instead of failing silently.
+Each word lookup is a tiny request and results are cached locally for 24 hours, so the free quota is more than enough for normal use. If the quota runs out or no key is set, it just falls back to Wiktionary without showing any error.
 
 ---
 
-## Roadmap / possible extensions
+## Some implementation notes
+
+**MutationObserver scope** — an earlier version watched `document.body` which fired on every UI update YouTube makes and caused noticeable lag. Scoping it to the video player container and throttling to 400ms fixed that.
+
+**AI + fallback, not AI only** — if the extension depended only on the Gemini API it would break whenever the key is missing or rate-limited. Wiktionary as a fallback means it always returns something.
+
+**API key out of version control** — the key goes in `config.js` which is gitignored. It gets loaded as a separate content script before `content.js`. Standard approach for this kind of client-side project.
+
+**Caching** — results are stored in memory and in `chrome.storage.local` with a 24h expiry, so re-clicking the same word is instant.
+
+---
+
+## Ideas for later
 
 - Support for more streaming platforms
-- Inflected-form lookup (so clicking *gelaufen* resolves to *laufen* automatically)
-- Spaced-repetition export format (Anki `.apkg`)
-- Firefox port (the codebase is already close to Manifest V2/V3 cross-compatible)
+- Better inflected-form handling (e.g. clicking *gelaufen* resolves to *laufen*)
+- Anki `.apkg` export
+- Firefox port
 
 ---
 
 ## License
 
-MIT — see [LICENSE](LICENSE)
+MIT — see LICENSE
