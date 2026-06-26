@@ -33,7 +33,7 @@ It got annoying fast. So I built this — you just click the word and the defini
 ## How it works
 
 When a subtitle appears on screen, the extension wraps each word in a `<span>` so they're individually clickable.
-When you click one, it first tries the Gemini API (free tier) to get a clean English definition and the base form if it's conjugated. 
+When you hover one, it first tries the Gemini API (free tier) to get a clean English definition and the base form if it's conjugated. 
 If that fails or no key is set, it falls back to Wiktionary automatically.
 
 The result pops up near the word — part of speech, gender for nouns, 2-3 definitions, and an example sentence. 
@@ -43,7 +43,7 @@ You can also star words to save them to a vocab list.
 
 ## Features
 
-- Click any word in German subtitles on YouTube or Netflix to look it up
+- Hover any word in German subtitles on YouTube or Netflix to look it up
 - Uses Gemini API (free) as the primary source — handles conjugated/inflected forms well
 - Falls back to Wiktionary if no API key is set or the AI call fails
 - Shows noun gender (der/die/das) as a colored badge
